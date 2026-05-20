@@ -1,10 +1,14 @@
 Alien Mayonnaise
 By GEA Innovation Studios - All rights reserved
 
-Das hier ist das Game Design Document (GDD), hier wird das Spiel, die dev Checkliste und gameplay Strategien beschrieben. 
+Das hier ist das Game Design Document (GDD), hier wird das Spiel und die dev Checkliste beschrieben. Für mehr info über die Architektur, die Klassen und deren Argumente oder das Tagebuch, siehe arch.txt, entity_guide.txt und diary.docx
 
 1. Das Spiel
-In Alien Mayonnaise kann man sich mit zwei Spieler auf ein Bildshirm bewegen und schießen. Alle spieler haben maximal 10 Leben, der erste mit 0 Leben explodiert und verschwindet vom Bildschirm. Gewinner ist der, der als letztes noch am Leben bleibtBeide Spieler können auf der selben Tastatur spielen und beide Tastenbelegungen können geändert werden.
+In Alien Mayonnaise kann man sich mit zwei Spieler auf ein Bildshirm bewegen und schießen. Alle spieler haben maximal 10 Leben, der erste mit 0 Leben explodiert
+und verschwindet vom Bildschirm. Man kann sich hinter asteroiden (blockEntities) verstecken und deckung nehmen.
+Nach 5 treffer explodieren auch die asteroiden. Wenn ein Asteroid zerstört wird, generiert sich ein neuer. 
+Gewinner ist der, der als letztes noch am Leben bleibt. Beide Spieler können auf der selben Tastatur spielen und beide 
+Tastenbelegungen können geändert werden.
 
 2. Dev Checkliste:
 [x] Pygame Fenster
@@ -24,4 +28,15 @@ In Alien Mayonnaise kann man sich mit zwei Spieler auf ein Bildshirm bewegen und
 [x] ProjectileEntity
 |-> [x] Auf dem Bildschirm platzieren
 |-> [x] In die richtung vom schützen fliegen
-[x] PlayerEntity mit
+|-> [x] Collision mit Spieler
+|-> [x] Collision mit PlayerEntity.damage() verbinden
+
+[ ] BlockEntity
+|-> [ ] Platzierung auf dem Bildschirm
+|-> [ ] Custom texturen
+|-> [ ] Zerstören nach 5 treffer
+
+[ ] Architektur
+|-> [x] Object basierte struktur
+|-> [ ] Classen in verschiedenen Dateien verschieben
+|-> [ ] TK für Dialogs
