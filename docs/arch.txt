@@ -1,0 +1,95 @@
+Architektur (arch.txt)
+GEA Innovation Studios - All rights reserved
+
+Hier werden die Strategien, Technologien und die größten Herausvorderungen präsentiert, die wir für die Entwicklung von Alien Mayonnaise verwendet haben. 
+
+Inhaltverzeichniss:
+1 - Objektbasierte Programmierung
+2 - Vektorialisierung von der Richtung
+3 - Eigene Bilder (pygame.blit())
+4 - Class-en in verschiedenen Dateien
+5 - Sonstiges
+
+1. Objektbasierte Programmierung:
+Anstatt für jeden spieler seine eigene funktion player1_move(), player2_move(), player1_draw() und so weiter, wollten wir etwas einfacheres machen. Etwas was den Code 
+übersichtlicher macht. Etwas was es uns ermöglicht nicht nur 1 oder 2, sondern soviele Spieler wie wir wollten. Oder sogar ein Spieler in Blau und den anderen in Rot. 
+Oder beide in Rot? Oder in Gelb sogar? Wie wir wollen. Ohne jedes mal die einzelnden Funktionen ändern zu müssen, was zu fehler hätte führen können. 
+
+Dann haben wir was gemerkt: Alle (alle) Spieler sind technisch gesehen alle gleich. Alle Projectile sind technisch gesehen alle gleich. Alle Hindernisse sind technisch
+gesehen alle gleich. Also haben wir für jede Entity (Spieler, Projectil, Block) eine Class erstellt. 
+
+Eine Class (zum Beispiel, ```class PlayerEntity```) definiert eine einzige Entity. Diese Entity kann man nacher überall wiederverwenden. Wenn man also eine 
+Class PlayerEntity schon hat, muss man den code nicht 2x so lang machen, nur um einen zweiten spieler hinzuzufügen. 
+
+In der Class müssen alle Variablen, alle Funkionen und kurzgefasst alles was den Spieler betrifft definiert werden. Kein player1_move(), sondern PlayerEntity.move(). 
+
+Alle Class-en brauchen eine __init__() funktion. Diese wird IMMER (immer) ein mal ausgeführt wenn die Class später im code verwendet
+wird (z.B.: Gabriele = PlayerEntity(str[]args)  <--- __init__() wird ein mal ausgeführt). In __init__() kann man alle setups, wie das erste Zeichnen vom Spieler
+oder das Speichern von wichtigen Variablen, wie Geschwindigkeit oder Richtung, reinschmeißen. 
+
+Class-en haben auch ihr eigenen Speicher. In __init__() kannst du variablen erstellen, die nicht nur in __init__() gültig sind, sondern in der ganzen Class. 
+(Dafür musst du in ALLEN funktionen innerhalb deiner Class 'self' als erstes argument haben. 
+Zum Beispiel: Du willst in __init__() die geschwindigkeit definieren aber du nutzt sie erst in move()? Einfach. In __init__(): 
+
+==============================================================
+class PlayerEntity:
+    def __init__(self):
+        self.speed = 5
+[____________________________________________________________]
+
+Jetzt kannst du in PlayerEntity.move() ganz einfach self.speed nutzen und 5 rausbekommen. Du kannst self. variablen auch außerhalb der Class nutzen in dem du 
+[Name der Class].speed (in diesem fall PlayerEntity.speed) verwendest. 
+
+Als __init__()'s argumente kannst du alles reinpacken, was die Spieler als unterschiede haben könnten. Zum beispiel start position oder geschwindigkeit:
+def __init__(self, speed, startX, startY):
+
+und dann, um alle dieser argumente für die ganze Class erreichbar zu machen:
+
+==============================================================
+class PlayerEntity:
+    def __init__(self, speed, startX, startY):
+        self. speed = speed
+        self.x = startX
+        self.y = startY
+[____________________________________________________________]
+
+Wenn du dann dein Spieler erstellst, musst du in den Klammern alle argumente, ausser self, von __init__() packen:
+Gabriele = PlayerEntity(5, 150, 200)
+                        | speed   |
+                            | startX
+                                  | startY
+
+Eine nicht-so-wichtige (r) sache zu beachten ist es, jede Class mit einer update() und einer draw() funktion auszurüsten, damit man im main loop das hier machen kann:
+
+==============================================================
+world = []
+
+Gabriele = PlayerEntity(5, 150, 200)
+Edoardo = PlayerEntity(5, 200, 200)
+Alessandro = PlayerEntity(5, 250, 200)
+
+world.append(Gabriele)
+world.append(Edoardo)
+world.append(Alessandro)
+
+while running:
+    for e in world:
+        e.update()  <-- Alle Class-en werden geupdated
+        e.draw()    <-- Alle Class-en werden gezeichnet
+[____________________________________________________________]
+
+2. Vektorialisierung von Richtung:
+Wenn man ein Spieler "PlayerEntity" hat, braucht man natürlich eine richtung "PlayerEntity.heading/self.heading". Aber wie macht man, dass unsere PlayerEntity nach 
+vorne in unsere richtung geht? Eine einfache step(n) funktion gibt es nicht wie in Scratch. Also ist die richtung in grad komplet nutzlos? Nein! Wir nehmen einfach 
+unsere richtung (z.B. 90 grad) und vektorialisieren sie in richtung(x, y). Anstatt 90 grad, haben wir jetzt wieviel sich die figur nach X+ bewegen sollte und wieviel
+nach Y+. Bei 90 grad wäre das (1, 0), bei 45 grad (1, 1), bei 270 grad (-1, 0) und so weiter. 
+
+Die Vektorialisierung berechnet man mit sin(f) und cos(f). Diese zwei sind keine vanilla python funktionen also importieren wir sie mit import math (from math import sin, cos)
+x = sin(heading)
+y = cos(heading)
+Vector2 = (x, y)
+
+Dieser vector wird dann mit der geschwindigkeit multipliziert und BAM! Schon weiß das programm wieviel sich PlayerEntity auf der X und auf der Y achse bewegen muss.
+
+3. Eigene Bilder:
+WIP
